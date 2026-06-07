@@ -546,6 +546,78 @@ body {
   letter-spacing: 0.01em;
 }
 
+.loan-workspace {
+  display: grid;
+  gap: 14px;
+}
+
+.loan-filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+}
+
+.loan-filter-input {
+  width: 100%;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-base);
+  background: var(--surface-container-lowest);
+  padding: 10px 12px;
+  color: var(--on-surface);
+  font-family: var(--font-body);
+}
+
+.loan-filter-input:focus {
+  outline: 2px solid color-mix(in srgb, var(--primary) 60%, transparent);
+  outline-offset: 1px;
+}
+
+.loan-status-pill {
+  display: inline-flex;
+  border-radius: var(--radius-full, 9999px);
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--outline-variant);
+}
+
+.loan-status-PENDING_REVIEW {
+  color: var(--tertiary);
+  background: color-mix(in srgb, var(--tertiary) 10%, transparent);
+}
+
+.loan-status-IN_VERIFICATION {
+  color: var(--primary-container);
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+.loan-status-SCORED,
+.loan-status-APPROVED {
+  color: var(--secondary);
+  background: color-mix(in srgb, var(--secondary) 12%, transparent);
+}
+
+.loan-status-FLAGGED {
+  color: var(--error);
+  background: color-mix(in srgb, var(--error) 12%, transparent);
+}
+
+.table-link-btn {
+  color: var(--primary-container);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.table-link-btn:hover {
+  text-decoration: underline;
+}
+
+.loan-detail-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 @media (max-width: 1080px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -562,6 +634,14 @@ body {
 
   .kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .loan-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .loan-detail-grid {
+    grid-template-columns: 1fr;
   }
 
   .login-hero-content {
