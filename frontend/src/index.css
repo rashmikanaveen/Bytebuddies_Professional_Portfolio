@@ -188,6 +188,103 @@ body {
   gap: 16px;
 }
 
+.dashboard-layout {
+  display: grid;
+  gap: 16px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.dashboard-panel {
+  min-height: 220px;
+}
+
+.dashboard-trend-panel {
+  min-height: 280px;
+}
+
+.trend-placeholder {
+  margin-top: 16px;
+  border: 1px dashed var(--outline);
+  border-radius: var(--radius-base);
+  height: 176px;
+  display: grid;
+  place-items: center;
+  color: var(--on-surface-variant);
+  background: var(--surface-container-low);
+}
+
+.dashboard-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.dashboard-list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-base);
+  padding: 10px 12px;
+}
+
+.dashboard-list-title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.dashboard-list-meta {
+  margin: 2px 0 0;
+  color: var(--on-surface-variant);
+  font-size: 12px;
+}
+
+.dashboard-list-right {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  color: var(--on-surface-variant);
+  font-size: 12px;
+}
+
+.dashboard-score-pill {
+  margin: 0;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-full, 9999px);
+  padding: 4px 10px;
+  font-weight: 700;
+  color: var(--secondary);
+  background: color-mix(in srgb, var(--secondary) 12%, transparent);
+}
+
+.dashboard-actions {
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.secondary-btn {
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-base);
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.secondary-btn:hover {
+  background: var(--surface-container-low);
+}
+
 .surface-card {
   border: 1px solid var(--outline-variant);
   border-radius: var(--radius-lg);
@@ -463,6 +560,10 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .login-hero-content {
     padding: 40px;
   }
@@ -480,6 +581,10 @@ body {
   }
 
   .page-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-grid {
     grid-template-columns: 1fr;
   }
 
