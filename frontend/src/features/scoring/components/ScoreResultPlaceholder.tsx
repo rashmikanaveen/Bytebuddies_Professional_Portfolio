@@ -1,16 +1,11 @@
-import SectionCard from '@/components/ui/SectionCard'
+import ScoreResultWorkspace from '@/features/scoring/components/ScoreResultWorkspace'
 
 type ScoreResultPlaceholderProps = {
   submissionId: string
 }
 
 function ScoreResultPlaceholder({ submissionId }: ScoreResultPlaceholderProps) {
-  return (
-    <SectionCard
-      title={`Score Result ${submissionId}`}
-      description="Score gauge, grade badge, E/S/G bars, and contribution breakdown modules will be implemented here."
-    />
-  )
+  return <ScoreResultWorkspace submissionId={submissionId} />
 }
 
 export default ScoreResultPlaceholder
