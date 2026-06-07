@@ -708,6 +708,41 @@ body {
   background: color-mix(in srgb, var(--error) 12%, transparent);
 }
 
+.verification-layout {
+  display: grid;
+  gap: 14px;
+}
+
+.verification-summary-panel {
+  display: grid;
+  gap: 8px;
+}
+
+.decision-control {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.decision-btn {
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-full, 9999px);
+  background: transparent;
+  color: var(--on-surface);
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.decision-btn-active {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
+  color: var(--primary);
+}
+
 @media (max-width: 1080px) {
   .app-shell {
     grid-template-columns: 1fr;

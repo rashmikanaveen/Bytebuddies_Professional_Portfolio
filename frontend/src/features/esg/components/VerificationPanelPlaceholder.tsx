@@ -1,4 +1,4 @@
-import SectionCard from '@/components/ui/SectionCard'
+import VerificationPanelWorkspace from '@/features/esg/components/VerificationPanelWorkspace'
 
 type VerificationPanelPlaceholderProps = {
   submissionId: string
@@ -7,12 +7,7 @@ type VerificationPanelPlaceholderProps = {
 function VerificationPanelPlaceholder({
   submissionId,
 }: VerificationPanelPlaceholderProps) {
-  return (
-    <SectionCard
-      title={`Verification Panel ${submissionId}`}
-      description="Side-by-side submitted vs extracted comparisons and field-level decisions will be implemented in this module."
-    />
-  )
+  return <VerificationPanelWorkspace submissionId={submissionId} />
 }
 
 export default VerificationPanelPlaceholder
