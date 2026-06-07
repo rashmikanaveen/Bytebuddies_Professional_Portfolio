@@ -1,4 +1,4 @@
-import SectionCard from '@/components/ui/SectionCard'
+import EsgSubmissionForm from '@/features/esg/components/EsgSubmissionForm'
 
 type EsgSubmissionPlaceholderProps = {
   submissionId: string
@@ -7,12 +7,7 @@ type EsgSubmissionPlaceholderProps = {
 function EsgSubmissionPlaceholder({
   submissionId,
 }: EsgSubmissionPlaceholderProps) {
-  return (
-    <SectionCard
-      title={`ESG Submission ${submissionId}`}
-      description="E / S / G sectioned input form and document upload module will be implemented with reusable feature components."
-    />
-  )
+  return <EsgSubmissionForm submissionId={submissionId} />
 }
 
 export default EsgSubmissionPlaceholder

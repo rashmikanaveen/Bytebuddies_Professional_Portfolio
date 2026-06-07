@@ -618,6 +618,96 @@ body {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.esg-submission-layout {
+  display: grid;
+  gap: 14px;
+}
+
+.esg-field-grid {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.upload-dropzone {
+  margin-top: 12px;
+  border: 1px dashed var(--outline);
+  border-radius: var(--radius-base);
+  background: var(--surface-container-low);
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.upload-dropzone-active {
+  border-color: var(--primary-container);
+  background: color-mix(in srgb, var(--primary-container) 12%, transparent);
+}
+
+.upload-title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.upload-copy {
+  margin: 0;
+  color: var(--on-surface-variant);
+  font-size: 13px;
+}
+
+.sr-only-input {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.upload-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.upload-list-row {
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-base);
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.upload-list-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.upload-status {
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-full, 9999px);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.upload-status-uploaded {
+  color: var(--secondary);
+  background: color-mix(in srgb, var(--secondary) 12%, transparent);
+}
+
+.upload-status-failed {
+  color: var(--error);
+  background: color-mix(in srgb, var(--error) 12%, transparent);
+}
+
 @media (max-width: 1080px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -641,6 +731,10 @@ body {
   }
 
   .loan-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .esg-field-grid {
     grid-template-columns: 1fr;
   }
 
