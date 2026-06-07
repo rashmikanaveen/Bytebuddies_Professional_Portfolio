@@ -10,8 +10,9 @@ import {
   Shield,
   UserCircle2,
 } from 'lucide-react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useMemo } from 'react'
+import brandLogo from '@/assets/newlogo.svg'
 
 type AppRole = 'officer' | 'applicant'
 
@@ -36,6 +37,7 @@ const applicantNavItems = [
 function BaseLayout({ role }: BaseLayoutProps) {
   const isOfficer = role === 'officer'
   const navItems = isOfficer ? officerNavItems : applicantNavItems
+  const navigate = useNavigate()
 
   const currentDate = useMemo(
     () =>
@@ -51,7 +53,7 @@ function BaseLayout({ role }: BaseLayoutProps) {
     <div className="app-shell">
       <aside className="sidebar">
         <div className="sidebar-brand">
-          <div className="brand-mark">GS</div>
+          <img src={brandLogo} className="brand-logo" alt="GreenFlow Engine" />
           <div>
             <p className="brand-title">Green Scoring</p>
             <p className="brand-subtitle">
@@ -75,7 +77,11 @@ function BaseLayout({ role }: BaseLayoutProps) {
           ))}
         </nav>
 
-        <button type="button" className="logout-btn">
+        <button
+          type="button"
+          className="logout-btn"
+          onClick={() => navigate('/login', { replace: true })}
+        >
           <LogOut size={16} aria-hidden="true" />
           Sign Out
         </button>
