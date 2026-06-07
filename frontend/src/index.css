@@ -869,6 +869,28 @@ body {
   background: linear-gradient(90deg, var(--primary), var(--secondary));
 }
 
+.reports-layout {
+  display: grid;
+  gap: 14px;
+}
+
+.reports-filter-grid {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.reports-actions {
+  display: grid;
+  gap: 8px;
+  align-content: end;
+}
+
+.report-export-btn {
+  margin-top: 0;
+}
+
 @media (max-width: 1080px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -900,6 +922,10 @@ body {
   }
 
   .score-result-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reports-filter-grid {
     grid-template-columns: 1fr;
   }
 
