@@ -36,7 +36,11 @@ function LoginPage() {
             console.
           </p>
 
-          <form className="login-form" noValidate>
+          <form
+            className="login-form"
+            noValidate
+            onSubmit={(event) => event.preventDefault()}
+          >
             <label htmlFor="email">Corporate Email</label>
             <input id="email" type="email" placeholder="name@institution.lk" />
 

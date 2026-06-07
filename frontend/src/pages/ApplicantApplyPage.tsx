@@ -7,7 +7,11 @@ function ApplicantApplyPage() {
         JPG, and PNG will be connected to backend services in the next phase.
       </p>
 
-      <form className="applicant-form" noValidate>
+      <form
+        className="applicant-form"
+        noValidate
+        onSubmit={(event) => event.preventDefault()}
+      >
         <div className="form-row">
           <label htmlFor="company-name">Company Name</label>
           <input
