@@ -333,27 +333,42 @@ body {
 
 .login-form {
   display: grid;
-  gap: 10px;
+  gap: 12px;
+}
+
+.login-form-row {
+  display: grid;
+  gap: 6px;
 }
 
 .login-form label {
-  margin-top: 6px;
   font-size: 14px;
   color: var(--on-surface);
 }
 
-.login-form input {
+.login-input {
   width: 100%;
   border: 1px solid var(--outline-variant);
   border-radius: var(--radius-base);
   background: var(--surface-container-lowest);
   padding: 11px 12px;
   color: var(--on-surface);
+  font-family: var(--font-body);
 }
 
-.login-form input:focus {
+.login-input:focus {
   outline: 2px solid color-mix(in srgb, var(--primary) 60%, transparent);
   outline-offset: 1px;
+}
+
+.login-input-error {
+  border-color: var(--error);
+}
+
+.login-error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--error);
 }
 
 .primary-btn {
