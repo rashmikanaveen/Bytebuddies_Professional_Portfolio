@@ -17,17 +17,17 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ### Phase 2 · Core Pages
 
-- [ ] Build Login page — form with email/password, client-side validation
-- [ ] Build Dashboard page — overview stat cards, placeholder chart areas
-- [ ] Build Loan Applications list page — sortable/filterable data table
-- [ ] Build Loan Application detail page — read-only view of all loan fields
-- [ ] Build ESG submission form — three-section form (E / S / G), one or more document upload per section, raw value inputs matching `docs/SCORING.md` metric registry
-- [ ] Build document upload component — drag-and-drop, accepts PDF/JPG/PNG, shows upload status per section
-- [ ] Build officer verification panel — side-by-side view of submitted value vs document-extracted value, VERIFIED / REJECTED / CANNOT_VERIFY toggle per field, required document label per metric
-- [ ] Build Green Score result view — score gauge (0–100), grade badge (A/B/C/D), E/S/G sub-score bars, per-metric contribution breakdown, pass/fail gate indicator
-- [ ] Build Reports page — date-range filter, export button placeholder
-- [ ] Implement role-based route guards (Loan Officer, Manager, Admin)
-- [ ] Build admin AHP weights panel — display active comparison matrices per sector, allow admin to submit updated matrix values
+- [x] Build Login page — form with email/password, client-side validation
+- [x] Build Dashboard page — overview stat cards, placeholder chart areas
+- [x] Build Loan Applications list page — sortable/filterable data table
+- [x] Build Loan Application detail page — read-only view of all loan fields
+- [x] Build ESG submission form — three-section form (E / S / G), one or more document upload per section, raw value inputs matching `docs/SCORING.md` metric registry
+- [x] Build document upload component — drag-and-drop, accepts PDF/JPG/PNG, shows upload status per section
+- [x] Build officer verification panel — side-by-side view of submitted value vs document-extracted value, VERIFIED / REJECTED / CANNOT_VERIFY toggle per field, required document label per metric
+- [x] Build Green Score result view — score gauge (0–100), grade badge (A/B/C/D), E/S/G sub-score bars, per-metric contribution breakdown, pass/fail gate indicator
+- [x] Build Reports page — date-range filter, export button placeholder
+- [x] Implement role-based route guards (Loan Officer, Manager, Admin)
+- [x] Build admin AHP weights panel — display active comparison matrices per sector, allow admin to submit updated matrix values
 
 ### Phase 3 · Polish
 
