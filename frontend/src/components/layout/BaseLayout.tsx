@@ -13,6 +13,7 @@ import {
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useMemo } from 'react'
 import brandLogo from '@/assets/newlogo.svg'
+import { clearSessionRole } from '@/features/auth/session'
 
 type AppRole = 'officer' | 'applicant'
 
@@ -80,7 +81,10 @@ function BaseLayout({ role }: BaseLayoutProps) {
         <button
           type="button"
           className="logout-btn"
-          onClick={() => navigate('/login', { replace: true })}
+          onClick={() => {
+            clearSessionRole()
+            navigate('/login', { replace: true })
+          }}
         >
           <LogOut size={16} aria-hidden="true" />
           Sign Out

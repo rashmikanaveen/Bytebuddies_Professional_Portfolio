@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import brandLogo from '@/assets/newlogo.svg'
 import LoginForm from '@/features/auth/components/LoginForm'
+import { setSessionRole } from '@/features/auth/session'
 import type { LoginFormValues } from '@/features/auth/types'
 
 const heroImageUrl =
@@ -18,6 +19,7 @@ function LoginPage() {
       applicant: '/applicant/status',
     }
 
+    setSessionRole(values.role)
     navigate(redirectMap[values.role], { replace: true })
   }
 
