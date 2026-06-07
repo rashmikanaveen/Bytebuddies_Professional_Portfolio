@@ -101,19 +101,21 @@ body {
 
 .logout-btn {
   margin-top: auto;
-  border: 0;
+  border: 1px solid transparent;
   border-radius: var(--radius-base);
-  background: color-mix(in srgb, var(--error) 14%, transparent);
+  background: transparent;
   padding: 10px 12px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   color: var(--error);
   cursor: pointer;
+  transition: all 140ms ease;
 }
 
 .logout-btn:hover {
-  background: color-mix(in srgb, var(--error) 24%, transparent);
+  border-color: var(--outline-variant);
+  background: var(--surface-container-low);
 }
 
 .main-pane {
