@@ -97,6 +97,24 @@ npm run dev
 
 > App: http://localhost:5173
 
+### 4. Mandatory Local CI Policy Setup
+
+All contributors must enable repository-managed Git hooks so the same quality gate used in CI runs before every push.
+
+```bash
+./scripts/setup-local-hooks.sh
+```
+
+```powershell
+.\scripts\setup-local-hooks.ps1
+```
+
+What this enforces on `git push`:
+- Frontend lint (`npm run lint`)
+- Frontend build/type-check (`npm run build`)
+
+If checks fail, push is blocked until fixed.
+
 ---
 
 ## Environment Variables
@@ -127,25 +145,41 @@ Copy `backend/.env.example` to `backend/.env` before running the backend. **Neve
 
 ```
 .
+├── .github/
+│   └── workflows/
+│       └── deploy-frontend.yml   # CD — deploys frontend to Vercel on push to main
+├── .githooks/
+│   └── pre-push                  # Local pre-push gate: runs frontend CI checks
 ├── docs/
-│   └── SCORING.md            # AHP scoring methodology, matrices, metric registry
-├── backend/                  # FastAPI application (uv managed)
+│   └── SCORING.md                # AHP scoring methodology, matrices, metric registry
+├── backend/                      # FastAPI application (uv managed)
 │   ├── app/
 │   │   ├── api/v1/
-│   │   │   └── endpoints/    # One file per domain (loans.py, scoring.py, …)
-│   │   ├── core/             # Settings, security, shared dependencies
-│   │   ├── services/
-│   │   │   └── scoring/      # AHP engine, metric definitions, normaliser
-│   │   └── main.py           # FastAPI app factory
-│   └── pyproject.toml        # Dependencies
-└── frontend/                 # React 19 + Vite 8 + TypeScript
-    ├── src/                  # Application source
-    ├── public/               # Static assets
-    ├── vite.config.ts
-    └── package.json
-    ├── src/
-    │   ├── App.tsx
-    │   └── main.tsx
-    ├── deno.json             # Deno 2 task runner config
-    └── package.json
+│   │   │   ├── router.py
+│   │   │   └── endpoints/        # One file per domain (health.py, …)
+│   │   ├── core/                 # Settings, security, shared dependencies
+│   │   │   └── config.py
+│   │   └── main.py               # FastAPI app factory
+│   ├── .env.example
+│   └── pyproject.toml            # Dependencies (uv)
+├── frontend/                     # React 19 + Vite 8 + TypeScript
+│   ├── public/
+│   │   └── favicon.svg
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── App.tsx
+│   │   ├── App.css
+│   │   ├── main.tsx
+│   │   └── index.css
+│   ├── index.html
+│   ├── vite.config.ts
+│   ├── tsconfig.json
+│   └── package.json
+├── scripts/
+│   ├── setup-local-hooks.sh      # One-time local hook setup
+│   ├── setup-local-hooks.ps1     # PowerShell hook setup (Windows)
+│   ├── local-ci-frontend.sh      # Lint + build checks used by hook
+│   └── local-ci-frontend.ps1     # PowerShell equivalent manual CI check
+├── TASKS.md
+└── README.md
 ```

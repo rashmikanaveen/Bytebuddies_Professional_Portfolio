@@ -6,9 +6,6 @@ on:
       - main
     paths:
       - 'frontend/**'
-  pull_request:
-    paths:
-      - 'frontend/**'
 
 jobs:
   deploy:
@@ -33,19 +30,19 @@ jobs:
         working-directory: frontend
         run: |
           vercel pull --yes \
-            --environment=${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }} \
+            --environment=production \
             --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build project
         working-directory: frontend
         run: |
           vercel build \
-            ${{ github.ref == 'refs/heads/main' && '--prod' || '' }} \
+            --prod \
             --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to Vercel
         working-directory: frontend
         run: |
           vercel deploy --prebuilt \
-            ${{ github.ref == 'refs/heads/main' && '--prod' || '' }} \
+            --prod \
             --token=${{ secrets.VERCEL_TOKEN }}
