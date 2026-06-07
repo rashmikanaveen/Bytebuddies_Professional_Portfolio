@@ -9,10 +9,11 @@ A Green Scoring System that integrates Environmental, Social, and Governance (ES
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 19 + TypeScript + Vite, Deno 2 |
+| Frontend | React 19 + Vite 8 + TypeScript |
 | Backend | Python 3.12 + FastAPI + uv |
 | Database | PostgreSQL (via SQLAlchemy + asyncpg) |
 | Auth | JWT (python-jose) |
+| Document Verification | AWS Textract or Azure Document Intelligence (cloud API) |
 | Monitoring | Grafana + Prometheus (owned by Dewmina) |
 
 ---
@@ -30,13 +31,21 @@ See [TASKS.md](./TASKS.md) for the full breakdown of atomic tasks per member.
 
 ---
 
+## Documentation
+
+| Document | Description |
+|---|---|
+| [TASKS.md](./TASKS.md) | Atomic tasks per member across all phases |
+| [docs/SCORING.md](./docs/SCORING.md) | AHP scoring methodology, comparison matrices, metric registry, verification pipeline |
+
+---
+
 ## Prerequisites
 
 | Tool | macOS / Linux | Windows (PowerShell) |
 |---|---|---|
-| [Deno 2](https://deno.land/) | `curl -fsSL https://deno.land/install.sh \| sh` | `irm https://deno.land/install.ps1 \| iex` |
-| [uv](https://docs.astral.sh/uv/getting-started/installation/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` | `powershell -c "irm https://astral.sh/uv/install.ps1 \| iex"` |
 | [Node.js 20+](https://nodejs.org/) | via [nvm](https://github.com/nvm-sh/nvm) or package manager | via [nvm-windows](https://github.com/coreybutler/nvm-windows) or installer |
+| [uv](https://docs.astral.sh/uv/getting-started/installation/) | `curl -LsSf https://astral.sh/uv/install.sh \| sh` | `powershell -c "irm https://astral.sh/uv/install.ps1 \| iex"` |
 | [PostgreSQL 16+](https://www.postgresql.org/) | `brew install postgresql@16` | [Installer](https://www.postgresql.org/download/windows/) or Docker |
 
 > **Windows users:** Git Bash, WSL2, or PowerShell 7+ all work. Commands below are shown for bash — PowerShell equivalents are noted where they differ.
@@ -62,7 +71,7 @@ git checkout -b <your-name>/<feature-name>
 cd backend
 uv sync
 cp .env.example .env   # then edit .env with your local values
-uv run python main.py
+uv run fastapi dev app/main.py
 ```
 
 **Windows (PowerShell)**
@@ -70,10 +79,12 @@ uv run python main.py
 cd backend
 uv sync
 Copy-Item .env.example .env   # then edit .env with your local values
-uv run python main.py
+uv run fastapi dev app/main.py
 ```
 
-> API: http://localhost:8000 · Swagger docs: http://localhost:8000/api/v1/docs
+> API: http://localhost:8000 · Swagger docs: http://localhost:8000/docs
+>
+> For production: `uv run fastapi run app/main.py`
 
 ### 3. Frontend
 
@@ -86,8 +97,6 @@ npm run dev
 
 > App: http://localhost:5173
 
-> **Deno users:** `deno task dev` / `deno task build` work from the `frontend/` directory.
-
 ---
 
 ## Environment Variables
@@ -99,6 +108,9 @@ Copy `backend/.env.example` to `backend/.env` before running the backend. **Neve
 | `DATABASE_URL` | PostgreSQL connection string |
 | `SECRET_KEY` | JWT signing key — use a strong random value in dev |
 | `ALLOWED_ORIGINS` | Comma-separated list of allowed CORS origins |
+| `DOCUMENT_INTELLIGENCE_PROVIDER` | `aws_textract` or `azure_doc_intelligence` |
+| `DOCUMENT_INTELLIGENCE_KEY` | API key for the document intelligence service |
+| `DOCUMENT_INTELLIGENCE_ENDPOINT` | Required for Azure only — your resource endpoint URL |
 
 ---
 
@@ -115,15 +127,22 @@ Copy `backend/.env.example` to `backend/.env` before running the backend. **Neve
 
 ```
 .
+├── docs/
+│   └── SCORING.md            # AHP scoring methodology, matrices, metric registry
 ├── backend/                  # FastAPI application (uv managed)
 │   ├── app/
-│   │   ├── api/v1/           # API routes (add new endpoints here)
+│   │   ├── api/v1/
 │   │   │   └── endpoints/    # One file per domain (loans.py, scoring.py, …)
 │   │   ├── core/             # Settings, security, shared dependencies
+│   │   ├── services/
+│   │   │   └── scoring/      # AHP engine, metric definitions, normaliser
 │   │   └── main.py           # FastAPI app factory
-│   ├── main.py               # Uvicorn entry point
 │   └── pyproject.toml        # Dependencies
-└── frontend/                 # React + Vite + TypeScript
+└── frontend/                 # React 19 + Vite 8 + TypeScript
+    ├── src/                  # Application source
+    ├── public/               # Static assets
+    ├── vite.config.ts
+    └── package.json
     ├── src/
     │   ├── App.tsx
     │   └── main.tsx
