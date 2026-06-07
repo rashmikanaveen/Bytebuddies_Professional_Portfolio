@@ -8,13 +8,15 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 ## Vihanga — UI
 
 ### Phase 1 · Setup
-- [ ] Install and configure Tailwind CSS v4
-- [ ] Install and configure shadcn/ui component library
-- [ ] Set up React Router v7 with placeholder routes (`/login`, `/dashboard`, `/loans`, `/scoring`, `/reports`, `/admin/weights`)
-- [ ] Create base layout component (sidebar, header, main content area)
-- [ ] Create a shared design token file (`src/styles/tokens.css`) for colours and typography
+
+- [x] Install and configure Tailwind CSS v4
+- [x] Install and configure shadcn/ui component library
+- [x] Set up React Router v7 with placeholder routes (`/login`, `/dashboard`, `/loans`, `/scoring`, `/reports`, `/admin/weights`)
+- [x] Create base layout component (sidebar, header, main content area)
+- [x] Create a shared design token file (`src/styles/tokens.css`) for colours and typography
 
 ### Phase 2 · Core Pages
+
 - [ ] Build Login page — form with email/password, client-side validation
 - [ ] Build Dashboard page — overview stat cards, placeholder chart areas
 - [ ] Build Loan Applications list page — sortable/filterable data table
@@ -28,6 +30,7 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] Build admin AHP weights panel — display active comparison matrices per sector, allow admin to submit updated matrix values
 
 ### Phase 3 · Polish
+
 - [ ] Implement responsive design (mobile and tablet breakpoints)
 - [ ] Add loading skeleton components for async data
 - [ ] Add toast notification system for API success/error feedback
@@ -38,12 +41,14 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 ## Semini & Rashmika — Database & Backend
 
 ### Phase 1 · Setup
+
 - [ ] Design ERD covering: `users`, `roles`, `customers`, `loans`, `document_store`, `esg_submissions`, `ahp_matrices`, `esg_scores`, `audit_logs` — reference `docs/SCORING.md` for column details
 - [ ] Set up Alembic for database migrations (`uv run alembic init`)
 - [ ] Create baseline migration from the ERD
 - [ ] Define SQLAlchemy async base model with `created_at`, `updated_at`, `id` (UUID)
 
 ### Phase 2 · Auth & Core Models
+
 - [ ] Implement `User` model, Pydantic schema, registration + login endpoints
 - [ ] Implement JWT auth — access token (30 min) + refresh token (7 days)
 - [ ] Implement RBAC middleware — roles: `loan_officer`, `manager`, `admin`
@@ -53,6 +58,7 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] Add input validation and sanitisation on all request bodies (use Pydantic strict mode)
 
 ### Phase 3 · ESG Verification Pipeline
+
 - [ ] Implement `document_store` model — file reference, submission ID, section (E/S/G), upload status
 - [ ] Implement secure file upload endpoint (`POST /api/v1/documents/upload`) — store file ref, not file content in DB; use object storage (S3 or local in dev)
 - [ ] Implement `esg_submissions` model — `e_inputs`, `s_inputs`, `g_inputs` as JSONB, per-field `verification_status` JSONB, overall `status` enum (`PENDING → SYSTEM_VERIFIED / FLAGGED_FOR_OFFICER → OFFICER_VERIFIED`)
@@ -67,6 +73,7 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] Write a database seed script for local development (`backend/scripts/seed.py`) including default AHP matrices
 
 ### Phase 4 · Quality
+
 - [ ] Write integration tests for all endpoints using `pytest` + `httpx`
 - [ ] Configure PostgreSQL connection pooling (pool size, overflow, timeout)
 - [ ] Add OpenAPI `description`, `summary`, and `response` docs to all endpoints
@@ -77,6 +84,7 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 ## Nipun — Algorithm & Scoring Model
 
 ### Phase 1 · Specification
+
 - [ ] Read `docs/SCORING.md` in full — confirm or propose changes to the default comparison matrices and metric registry before any implementation starts
 - [ ] Conduct AHP expert elicitation session with at least 3 domain experts (loan officer + risk manager + sustainability officer) — record pairwise judgments for pillar-level and all within-pillar matrices
 - [ ] Verify all expert-derived matrices have CR ≤ 0.10; revise any that exceed the threshold
@@ -86,6 +94,7 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] Update `docs/SCORING.md` with final expert-derived matrices and sector benchmarks
 
 ### Phase 2 · Implementation (`backend/app/services/scoring/`)
+
 - [ ] Implement `metrics.py` — metric registry dataclass: key, label, pillar, direction, min_val, max_val, plausibility_max per sector, tolerance, hard_penalty flag, required document label
 - [ ] Implement `ahp.py` — pure functions: `derive_weights(matrix)` returns `(weights, cr)`, `validate_cr(cr)` raises if CR > 0.10
 - [ ] Implement `normaliser.py` — pure functions: `normalise_higher_is_better(value, min, max)` and `normalise_lower_is_better(value, min, max)`, both return 0–100 float
@@ -94,6 +103,7 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] Implement cross-metric consistency checker — `check_consistency(e_inputs, s_inputs, g_inputs)` returns list of inconsistency flags
 
 ### Phase 3 · Validation
+
 - [ ] Write bias detection tests — assert that score distributions across different sectors and company sizes are not skewed by non-ESG factors
 - [ ] Validate edge cases: all-zero inputs (all missing), all-maximum inputs, partial missing fields, hard penalty trigger
 - [ ] Run scoring engine on synthetic loan dataset (minimum 20 cases) and verify results are intuitive
@@ -104,6 +114,7 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 ## Dewmina — Testing, CI/CD, Monitoring & Deployment
 
 ### Phase 1 · Testing Framework Setup
+
 - [ ] Configure `pytest` in `pyproject.toml` (testpaths, asyncio mode, coverage threshold ≥ 80%)
 - [ ] Set up Vitest for frontend unit tests (`npm install -D vitest @testing-library/react`)
 - [ ] Set up Playwright for end-to-end tests (`npm install -D @playwright/test`)
@@ -111,6 +122,7 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] Write frontend smoke test: app mounts, login route renders
 
 ### Phase 2 · Scoring & Verification Tests
+
 - [ ] Write unit tests for `ahp.py` — known matrix → expected weights, CR value; assert CR > 0.10 raises exception
 - [ ] Write unit tests for `normaliser.py` — boundary values (0, max, above max, negative), both directions
 - [ ] Write unit tests for `engine.py` — known inputs → expected green score; hard penalty trigger; all-zero inputs
@@ -120,6 +132,7 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] Mock the document intelligence API in all tests (no real API calls in CI)
 
 ### Phase 3 · CI/CD Pipeline
+
 - [ ] Create GitHub Actions workflow — backend: `ruff` lint → `pytest` → build check (triggers on PR to `main`)
 - [ ] Create GitHub Actions workflow — frontend: `eslint` → `vitest` → `vite build` (triggers on PR to `main`)
 - [ ] Add `pre-commit` hooks: `ruff`, `black` for Python; `eslint --fix` for TypeScript
@@ -128,6 +141,7 @@ Status markers: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] Add `pip-audit` / `npm audit` step to CI to catch vulnerable dependencies
 
 ### Phase 4 · Monitoring & Deployment
+
 - [ ] Add `prometheus-fastapi-instrumentator` to backend — expose `/metrics` endpoint
 - [ ] Write `docker-compose.yml` covering: FastAPI, PostgreSQL, Prometheus, Grafana
 - [ ] Configure Grafana dashboards: request rate, p95 latency, error rate, scoring throughput, verification pipeline queue depth
