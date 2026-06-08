@@ -62,6 +62,9 @@ export type ApiQuestion = {
   required: boolean
   placeholder?: string
   helpText?: string
+  maxLength?: number
+  min?: number
+  max?: number
   order: number
   options?: ApiQuestionOption[]
 }
@@ -102,8 +105,16 @@ export type ApiQuestionResponseResult = {
 }
 
 export type ApiDocumentUploadResult = {
+  documentId?: number
   fileName: string
   status: 'uploaded'
+}
+
+export type ApiDocumentVerificationResult = {
+  applicationId: string
+  confidenceScore: number
+  status: 'SYSTEM_VERIFIED' | 'FLAGGED_FOR_OFFICER' | 'verified' | 'flagged'
+  message: string
 }
 
 export type ApiScoreResult = {
