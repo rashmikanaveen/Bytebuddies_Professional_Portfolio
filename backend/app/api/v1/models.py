@@ -97,7 +97,7 @@ class Response(Base):
 
     score = Column(Float, default=0)
 
-    requires_document = Column(Boolean, default=False)
+    requires_document = Column(String(500), nullable=True)
 
     application = relationship(
         "Application",
