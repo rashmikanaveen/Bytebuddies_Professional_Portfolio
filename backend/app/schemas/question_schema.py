@@ -21,7 +21,6 @@ class QuestionOut(BaseModel):
     question_id: int
     question_text: str
     category: str
-    metric_key: str
     weight: float
 
     class Config:
