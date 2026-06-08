@@ -5,6 +5,7 @@ import { createApplicationMock } from '@/lib/api/mock/providers'
 import type {
   ApiApplicationCreatePayload,
   ApiApplicationCreateResult,
+  ApiApplicationRecord,
 } from '@/lib/api/types'
 
 export function useApplicationsApi() {
@@ -40,5 +41,58 @@ export function useApplicationsApi() {
     [],
   )
 
-  return { loading, error, createApplication }
+  const listApplications = useCallback(async (): Promise<ApiApplicationRecord[]> => {
+    setLoading(true)
+    setError(null)
+    try {
+      return await requestJson<ApiApplicationRecord[]>('/applications/')
+    } catch (caught) {
+      const message =
+        caught instanceof Error ? caught.message : 'Failed to load applications'
+      setError(message)
+      throw caught
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  const getApplication = useCallback(
+    async (applicationId: number): Promise<ApiApplicationRecord> => {
+      setLoading(true)
+      setError(null)
+      try {
+        return await requestJson<ApiApplicationRecord>(`/applications/${applicationId}`)
+      } catch (caught) {
+        const message =
+          caught instanceof Error ? caught.message : 'Failed to load application'
+        setError(message)
+        throw caught
+      } finally {
+        setLoading(false)
+      }
+    },
+    [],
+  )
+
+  const approveApplication = useCallback(
+    async (applicationId: number): Promise<ApiApplicationRecord> => {
+      setLoading(true)
+      setError(null)
+      try {
+        return await requestJson<ApiApplicationRecord>(`/applications/approve/${applicationId}`, {
+          method: 'POST',
+        })
+      } catch (caught) {
+        const message =
+          caught instanceof Error ? caught.message : 'Failed to approve application'
+        setError(message)
+        throw caught
+      } finally {
+        setLoading(false)
+      }
+    },
+    [],
+  )
+
+  return { loading, error, createApplication, listApplications, getApplication, approveApplication }
 }

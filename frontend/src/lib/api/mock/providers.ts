@@ -180,7 +180,7 @@ export async function loginMock(
   ) ?? {
     name: payload.email.split('@')[0],
     email: payload.email,
-    role: payload.role,
+    role: 'applicant',
   }
 
   return {

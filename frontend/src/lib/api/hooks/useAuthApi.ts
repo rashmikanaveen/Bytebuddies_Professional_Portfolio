@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react'
 import { API_MODE } from '@/lib/api/config'
 import { requestJson } from '@/lib/api/client'
-import { loginMock, registerMock } from '@/lib/api/mock/providers'
+import api from '@/services/api'
+import { registerMock } from '@/lib/api/mock/providers'
 import type {
   ApiLoginPayload,
   ApiLoginResult,
@@ -18,14 +19,8 @@ export function useAuthApi() {
       setLoading(true)
       setError(null)
       try {
-        if (API_MODE === 'mock') {
-          return await loginMock(payload)
-        }
-
-        return await requestJson<ApiLoginResult>('/auth/login', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-        })
+        const response = await api.post<ApiLoginResult>('/auth/login', payload)
+        return response.data
       } catch (caught) {
         const message =
           caught instanceof Error ? caught.message : 'Failed to login'

@@ -1,17 +1,17 @@
 import { Link } from 'react-router-dom'
 import LoanStatusPill from '@/features/loans/components/LoanStatusPill'
-import type { LoanRecord } from '@/features/loans/types'
+import type { ApiApplicationRecord } from '@/lib/api/types'
 
 type LoansTableProps = {
-  loans: LoanRecord[]
+  loans: ApiApplicationRecord[]
 }
 
 function LoansTable({ loans }: LoansTableProps) {
   if (loans.length === 0) {
     return (
       <div className="surface-card">
-        <h2>Loan Applications</h2>
-        <p>No loans matched this filter.</p>
+        <h2>Applications</h2>
+        <p>No applications found.</p>
       </div>
     )
   }
@@ -22,31 +22,29 @@ function LoansTable({ loans }: LoansTableProps) {
         <table className="status-table">
           <thead>
             <tr>
-              <th>Loan ID</th>
-              <th>Borrower</th>
-              <th>Sector</th>
-              <th>Amount (LKR)</th>
-              <th>Green Score</th>
+              <th>Application ID</th>
+              <th>User ID</th>
+              <th>Business Name</th>
+              <th>Industry</th>
+              <th>Loan Amount (LKR)</th>
               <th>Status</th>
-              <th>Updated</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {loans.map((loan) => (
-              <tr key={loan.id}>
-                <td>{loan.id}</td>
-                <td>{loan.borrower}</td>
-                <td>{loan.sector}</td>
-                <td>{loan.amountLkr.toLocaleString()}</td>
-                <td>{loan.greenScore}</td>
+            {loans.map((application) => (
+              <tr key={application.application_id}>
+                <td>{application.application_id}</td>
+                <td>{application.user_id}</td>
+                <td>{application.business_name}</td>
+                <td>{application.industry}</td>
+                <td>{application.loan_amount.toLocaleString()}</td>
                 <td>
-                  <LoanStatusPill status={loan.status} />
+                  <LoanStatusPill status={application.status} />
                 </td>
-                <td>{loan.updatedAt}</td>
                 <td>
                   <Link
-                    to={`/officer/loans/${loan.id}`}
+                    to={`/officer/loans/${application.application_id}`}
                     className="table-link-btn"
                   >
                     View

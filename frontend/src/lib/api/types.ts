@@ -19,7 +19,6 @@ export type ApiAuthUser = {
 export type ApiLoginPayload = {
   email: string
   password: string
-  role: ApiUserRole
 }
 
 export type ApiLoginResult = {
@@ -78,6 +77,15 @@ export type ApiApplicationCreatePayload = {
 export type ApiApplicationCreateResult = {
   applicationId: string
   status: 'DRAFT' | 'SUBMITTED'
+}
+
+export type ApiApplicationRecord = {
+  application_id: number
+  user_id: number
+  business_name: string
+  industry: string
+  status: string
+  loan_amount: number
 }
 
 export type ApiQuestionResponsePayload = {
