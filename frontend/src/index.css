@@ -218,6 +218,15 @@ body {
   background: var(--surface-container-low);
 }
 
+.dashboard-chart-wrap,
+.applicant-chart-wrap {
+  margin-top: 12px;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-base);
+  background: var(--surface-container-lowest);
+  padding: 12px;
+}
+
 .dashboard-list {
   list-style: none;
   margin: 16px 0 0;
