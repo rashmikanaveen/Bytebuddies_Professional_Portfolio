@@ -162,11 +162,30 @@ export async function uploadDocumentMock(
 export async function verifyDocumentMock(
   applicationId: string,
 ): Promise<ApiDocumentVerificationResult> {
-  return {
-    applicationId,
-    confidenceScore: 0.92,
-    status: 'SYSTEM_VERIFIED',
-    message: 'Proof document verified.',
+  const isSuccess = Math.random() > 0.3
+  if (isSuccess) {
+    const confidenceScore = parseFloat((0.75 + Math.random() * 0.23).toFixed(2))
+    return {
+      applicationId,
+      confidenceScore,
+      status: 'SYSTEM_VERIFIED',
+      message: `Proof document verified successfully`,
+    }
+  } else {
+    const confidenceScore = parseFloat((0.15 + Math.random() * 0.5).toFixed(2))
+    const reasons = [
+      'Value mismatch: submitted value deviates significantly from the extracted document data.',
+      'Low resolution document: key details could not be parsed confidently.',
+      'Document type mismatch: the uploaded file does not appear to match the required metric certificate.',
+      'Missing signatures: verification failed due to missing organizational stamp or signature.',
+    ]
+    const message = reasons[Math.floor(Math.random() * reasons.length)]
+    return {
+      applicationId,
+      confidenceScore,
+      status: 'FLAGGED_FOR_OFFICER',
+      message,
+    }
   }
 }
 
