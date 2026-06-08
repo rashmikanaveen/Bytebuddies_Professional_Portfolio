@@ -12,14 +12,13 @@ import type {
 export function useApplicantSubmission() {
   const { createApplication } = useApplicationsApi()
   const { submitResponses } = useQuestionResponsesApi()
-  const { uploadDocument } = useDocumentsApi()
+  const { uploadDocument, verifyDocument } = useDocumentsApi()
   const [submitting, setSubmitting] = useState(false)
   const [submitMessage, setSubmitMessage] = useState<string | null>(null)
+  const [applicationId, setApplicationId] = useState<string | null>(null)
 
-  async function submitApplication(
-    questions: ApplicantQuestion[],
+  async function submitLoanDetails(
     answers: Record<string, ApplicantAnswerValue>,
-    files: File[],
   ) {
     setSubmitting(true)
     setSubmitMessage(null)
@@ -35,8 +34,67 @@ export function useApplicantSubmission() {
         purpose,
       })
 
+      setApplicationId(appResult.applicationId)
+      return appResult.applicationId
+    } catch {
+      setSubmitMessage('Unable to create draft application. Please try again.')
+      return null
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  async function uploadEsgDocument(
+    file: File,
+    targetApplicationId = applicationId,
+  ) {
+    if (!targetApplicationId) {
+      throw new Error(
+        'Application ID is missing. Please submit loan details first.',
+      )
+    }
+
+    try {
+      return await uploadDocument(targetApplicationId, file)
+    } catch (err) {
+      console.error('Failed to upload document:', err)
+      throw err
+    }
+  }
+
+  async function verifyEsgDocument(targetApplicationId = applicationId) {
+    if (!targetApplicationId) {
+      throw new Error(
+        'Application ID is missing. Please submit loan details first.',
+      )
+    }
+
+    try {
+      return await verifyDocument(targetApplicationId)
+    } catch (err) {
+      console.error('Failed to verify document:', err)
+      throw err
+    }
+  }
+
+  async function finalizeApplication(
+    questions: ApplicantQuestion[],
+    answers: Record<string, ApplicantAnswerValue>,
+    targetApplicationId = applicationId,
+  ) {
+    if (!targetApplicationId) {
+      setSubmitMessage(
+        'Application ID is missing. Please submit loan details first.',
+      )
+      return
+    }
+
+    setSubmitting(true)
+    setSubmitMessage(null)
+
+    try {
       await submitResponses({
-        applicationId: appResult.applicationId,
+        applicationId: targetApplicationId,
         responses: questions
           .filter((question) => answers[question.key] !== undefined)
           .map((question) => ({
@@ -45,15 +103,11 @@ export function useApplicantSubmission() {
           })),
       })
 
-      await Promise.all(
-        files.map((file) => uploadDocument(appResult.applicationId, file)),
-      )
-
       setSubmitMessage(
-        `Application ${appResult.applicationId} submitted successfully.`,
+        `Application ${targetApplicationId} submitted successfully.`,
       )
     } catch {
-      setSubmitMessage('Unable to submit application. Please try again.')
+      setSubmitMessage('Unable to finalize application. Please try again.')
     } finally {
       setSubmitting(false)
     }
@@ -62,6 +116,10 @@ export function useApplicantSubmission() {
   return {
     submitting,
     submitMessage,
-    submitApplication,
+    applicationId,
+    submitLoanDetails,
+    uploadEsgDocument,
+    verifyEsgDocument,
+    finalizeApplication,
   }
 }

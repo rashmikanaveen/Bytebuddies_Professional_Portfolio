@@ -555,16 +555,58 @@ body {
 .applicant-form {
   margin-top: 20px;
   display: grid;
-  gap: 14px;
+  gap: 22px;
 }
 
 .applicant-question-section {
-  padding: 16px;
+  border-top: 4px solid var(--primary);
+  padding: 18px;
 }
 
 .applicant-question-section h3 {
   margin: 0 0 12px;
-  font-size: 16px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.applicant-section-LOAN {
+  border-top-color: var(--primary);
+}
+
+.applicant-section-E {
+  border-top-color: var(--secondary);
+}
+
+.applicant-section-E h3 {
+  color: var(--secondary);
+}
+
+.applicant-section-S {
+  border-top-color: var(--tertiary);
+}
+
+.applicant-section-S h3 {
+  color: var(--tertiary);
+}
+
+.applicant-section-G {
+  border-top-color: var(--primary-container);
+}
+
+.applicant-section-G h3 {
+  color: var(--primary-container);
+}
+
+.loan-details-section {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 14px 16px;
+}
+
+.loan-details-section h3,
+.loan-details-section .form-row-wide {
+  grid-column: 1 / -1;
 }
 
 .form-row {
@@ -597,6 +639,10 @@ body {
   margin: 0;
 }
 
+.form-row-checkbox .question-proof-panel {
+  grid-column: 1 / -1;
+}
+
 .form-checkbox {
   width: 18px !important;
   height: 18px;
@@ -607,6 +653,57 @@ body {
 .form-row textarea:focus {
   outline: 2px solid color-mix(in srgb, var(--primary) 60%, transparent);
   outline-offset: 1px;
+}
+
+.question-proof-panel {
+  display: grid;
+  gap: 8px;
+  border: 1px dashed var(--outline-variant);
+  border-radius: var(--radius-base);
+  background: var(--surface-container-low);
+  padding: 10px;
+}
+
+.question-proof-panel input[type='file'] {
+  width: min(100%, 320px);
+  justify-self: start;
+  padding: 8px;
+}
+
+.question-proof-panel input[type='file']::file-selector-button {
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-base);
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  padding: 7px 10px;
+  cursor: pointer;
+}
+
+.question-proof-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.question-proof-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 112px;
+  margin-top: 0;
+  text-align: center;
+}
+
+.question-proof-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@media (max-width: 720px) {
+  .loan-details-section {
+    grid-template-columns: 1fr;
+  }
 }
 
 .status-table-wrap {

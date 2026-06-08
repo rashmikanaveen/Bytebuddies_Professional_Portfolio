@@ -5,6 +5,7 @@ import type {
   ApiApplicationCreateResult,
   ApiCreateQuestionPayload,
   ApiDocumentUploadResult,
+  ApiDocumentVerificationResult,
   ApiQuestion,
   ApiQuestionResponsePayload,
   ApiQuestionResponseResult,
@@ -152,8 +153,20 @@ export async function uploadDocumentMock(
   file: File,
 ): Promise<ApiDocumentUploadResult> {
   return {
+    documentId: Date.now(),
     fileName: file.name,
     status: 'uploaded',
+  }
+}
+
+export async function verifyDocumentMock(
+  applicationId: string,
+): Promise<ApiDocumentVerificationResult> {
+  return {
+    applicationId,
+    confidenceScore: 0.92,
+    status: 'SYSTEM_VERIFIED',
+    message: 'Proof document verified.',
   }
 }
 
