@@ -56,5 +56,23 @@ export function useApplicationsApi() {
     }
   }, [])
 
-  return { loading, error, createApplication, listApplications }
+  const getApplication = useCallback(
+    async (applicationId: number): Promise<ApiApplicationRecord> => {
+      setLoading(true)
+      setError(null)
+      try {
+        return await requestJson<ApiApplicationRecord>(`/applications/${applicationId}`)
+      } catch (caught) {
+        const message =
+          caught instanceof Error ? caught.message : 'Failed to load application'
+        setError(message)
+        throw caught
+      } finally {
+        setLoading(false)
+      }
+    },
+    [],
+  )
+
+  return { loading, error, createApplication, listApplications, getApplication }
 }
