@@ -504,6 +504,15 @@ body {
   gap: 14px;
 }
 
+.applicant-question-section {
+  padding: 16px;
+}
+
+.applicant-question-section h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
 .form-row {
   display: grid;
   gap: 8px;
