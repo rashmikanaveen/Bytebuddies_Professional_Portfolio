@@ -163,9 +163,8 @@ function ApplicantApplyWorkspace() {
         {sections.map((section) => (
           <article
             key={section.key}
-            className={`surface-card applicant-question-section applicant-section-${section.key} ${
-              section.key === 'LOAN' ? 'loan-details-section' : ''
-            }`}
+            className={`surface-card applicant-question-section applicant-section-${section.key} ${section.key === 'LOAN' ? 'loan-details-section' : ''
+              }`}
           >
             <h3>{section.title}</h3>
             {section.questions.map((question) => (
@@ -178,8 +177,8 @@ function ApplicantApplyWorkspace() {
                 }
                 proofControls={
                   question.category === 'E' ||
-                  question.category === 'S' ||
-                  question.category === 'G' ? (
+                    question.category === 'S' ||
+                    question.category === 'G' ? (
                     <div className="question-proof-panel">
                       <input
                         id={`${question.key}-proof`}
@@ -207,7 +206,10 @@ function ApplicantApplyWorkspace() {
                           className="primary-btn question-proof-btn"
                           disabled={
                             activeProofKey === question.key ||
-                            !proofStatuses[question.key]?.uploaded
+                            !proofStatuses[question.key]?.uploaded ||
+                            answers[question.key] === undefined ||
+                            answers[question.key] === null ||
+                            String(answers[question.key]).trim() === ''
                           }
                           onClick={() => void handleProofVerify(question.key)}
                         >
