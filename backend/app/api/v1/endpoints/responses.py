@@ -1,34 +1,27 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from pydantic import BaseModel
-from typing import List
 from app.api.v1.database import get_async_db
 from app.api.v1.models import Response
+from app.schemas.responses import ResponseBulkSubmit
 
 router = APIRouter(prefix="/responses", tags=["Responses"])
 
-class ResponseSubmit(BaseModel):
-    question_id: int
-    answer_value: str
-
-class ResponseBulkSubmit(BaseModel):
-    application_id: int
-    responses: List[ResponseSubmit]
-
 @router.post("/")
 async def submit_response(data: ResponseBulkSubmit, db: AsyncSession = Depends(get_async_db)):
-    # Step 1b: User fills ESG Questionnaire
-    new_responses = []
-    for resp in data.responses:
-        new_resp = Response(
+    # Save the full questionnaire in one request and one commit.
+    new_responses = [
+        Response(
             application_id=data.application_id,
             question_id=resp.question_id,
             answer_value=resp.answer_value,
-            score=0.0  # Will be calculated during the decision step
+            requires_document=resp.requires_document,
+            score=0.0,
         )
-        db.add(new_resp)
-        new_responses.append(new_resp)
+        for resp in data.responses
+    ]
+
+    db.add_all(new_responses)
     
     await db.commit()
     return {"msg": "responses saved successfully", "count": len(new_responses)}
@@ -39,5 +32,13 @@ async def get_responses(application_id: int, db: AsyncSession = Depends(get_asyn
     responses = result.scalars().all()
     return {
         "application_id": application_id,
-        "responses": [{"question_id": r.question_id, "answer_value": r.answer_value} for r in responses]
+        "responses": [
+            {
+                "question_id": r.question_id,
+                "answer_value": r.answer_value,
+                "score": r.score,
+                "requires_document": r.requires_document,
+            }
+            for r in responses
+        ]
     }
