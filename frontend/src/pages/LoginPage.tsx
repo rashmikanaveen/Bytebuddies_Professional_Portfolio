@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import brandLogo from '@/assets/newlogo.svg'
 import LoginForm from '@/features/auth/components/LoginForm'
 import { setSessionUser } from '@/features/auth/session'
-import type { LoginFormValues } from '@/features/auth/types'
+import type { LoginFormValues, SessionUser } from '@/features/auth/types'
 import { useAuthApi } from '@/lib/api/hooks'
 
 const heroImageUrl =
@@ -20,9 +20,18 @@ function LoginPage() {
       applicant: '/applicant/status',
     }
 
-    const result = await login(values)
+    await login({
+      email: values.email,
+      password: values.password,
+    })
 
-    setSessionUser(result.user)
+    const sessionUser: SessionUser = {
+      name: values.email.split('@')[0],
+      email: values.email,
+      role: values.role,
+    }
+
+    setSessionUser(sessionUser)
     navigate(redirectMap[values.role], { replace: true })
   }
 

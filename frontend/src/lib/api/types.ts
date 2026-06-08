@@ -19,7 +19,6 @@ export type ApiAuthUser = {
 export type ApiLoginPayload = {
   email: string
   password: string
-  role: ApiUserRole
 }
 
 export type ApiLoginResult = {
