@@ -4,6 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.v1.database import get_async_db
 from app.api.v1.models import Document, Application
 import os
+import random
+
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
 
@@ -39,7 +41,7 @@ async def verify_documents(application_id: int, db: AsyncSession = Depends(get_a
         raise HTTPException(status_code=404, detail="Application not found")
 
     # Placeholder mock for real OCR and LLM comparison logic
-    mock_llm_confidence_score = 0.85 
+    mock_llm_confidence_score = random.random()
     
     if mock_llm_confidence_score < 0.90:
         app_record.status = "FLAGGED_FOR_OFFICER" # Step 7
