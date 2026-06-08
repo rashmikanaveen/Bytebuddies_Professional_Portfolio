@@ -3,4 +3,5 @@ set -euo pipefail
 
 ROOT_DIR="$(git rev-parse --show-toplevel)"
 
-"$ROOT_DIR/scripts/local-ci-frontend.sh"
+bash "$ROOT_DIR/scripts/local-ci-frontend.sh"
+bash "$ROOT_DIR/scripts/local-ci-backend.sh"

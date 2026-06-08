@@ -7,4 +7,4 @@ cd "$ROOT_DIR"
 git config core.hooksPath .githooks
 
 echo "Local Git hooks enabled from .githooks/."
-echo "Pre-push will now run frontend CI checks."
+echo "Pre-push will now run frontend and backend CI checks."

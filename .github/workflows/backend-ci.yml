@@ -1,0 +1,41 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
+      - '.github/workflows/deploy-backend-render.yml'
+  workflow_dispatch:
+
+jobs:
+  ci:
+    name: Backend lintless smoke CI
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install backend dependencies
+        run: uv sync --frozen
+
+      - name: Verify app imports
+        run: uv run python -c "from app.main import app; print(app.title)"
+
+      - name: Run backend smoke tests
+        run: uv run pytest -q

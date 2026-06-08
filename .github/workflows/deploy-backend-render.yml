@@ -1,0 +1,40 @@
+name: Deploy Backend to Render
+
+on:
+  workflow_run:
+    workflows:
+      - Backend CI
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Trigger Render deploy
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main')
+
+    steps:
+      - name: Validate required secrets
+        run: |
+          if [[ -z "${{ secrets.RENDER_API_KEY }}" ]]; then
+            echo "Missing GitHub secret: RENDER_API_KEY"
+            exit 1
+          fi
+
+          if [[ -z "${{ secrets.RENDER_SERVICE_ID }}" ]]; then
+            echo "Missing GitHub secret: RENDER_SERVICE_ID"
+            exit 1
+          fi
+
+      - name: Trigger deployment on Render
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --url "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+            --header "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            --header "Accept: application/json" \
+            --header "Content-Type: application/json"
