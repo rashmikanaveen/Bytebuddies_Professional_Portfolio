@@ -14,6 +14,9 @@ jobs:
   ci:
     name: Backend lintless smoke CI
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.BACKEND_DATABASE_URL }}
+      SECRET_KEY: ${{ secrets.BACKEND_SECRET_KEY }}
 
     defaults:
       run:
@@ -30,6 +33,18 @@ jobs:
 
       - name: Install uv
         run: pip install uv
+
+      - name: Validate required secrets
+        run: |
+          if [[ -z "$DATABASE_URL" ]]; then
+            echo "Missing GitHub secret: BACKEND_DATABASE_URL"
+            exit 1
+          fi
+
+          if [[ -z "$SECRET_KEY" ]]; then
+            echo "Missing GitHub secret: BACKEND_SECRET_KEY"
+            exit 1
+          fi
 
       - name: Install backend dependencies
         run: uv sync --frozen
