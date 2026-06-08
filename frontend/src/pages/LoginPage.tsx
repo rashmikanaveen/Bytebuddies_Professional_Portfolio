@@ -1,17 +1,18 @@
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import brandLogo from '@/assets/newlogo.svg'
 import LoginForm from '@/features/auth/components/LoginForm'
-import { setSessionRole } from '@/features/auth/session'
+import { setSessionUser } from '@/features/auth/session'
 import type { LoginFormValues } from '@/features/auth/types'
+import { useAuthApi } from '@/lib/api/hooks'
 
 const heroImageUrl =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuB3qAl0UIJEsC8TEfeIzj47jD5xvi35jLMdspx7d62DLnNWMMm77An2kRAqtrfwTFm1OWfVg77ZlgraPeB0p8QkImiEhi9mIng0kxcylhx3EDN92q4c9LAzsl6ii2Bltda-8qa-d4CawLntggIDgvQKV7R6o6u_LuDEiK6CGRX2s8QZj8sh-hHEfmMQZM5ZYuTiyq3cNW0EPrjqn21kRpfV9pXM-iE9LP7v-4KNmREURng0aNkids7TbuAr4DaDKEUAKvkzDeAwpyQ'
 
 function LoginPage() {
   const navigate = useNavigate()
+  const { login, loading, error } = useAuthApi()
 
-  function handleLoginSuccess(values: LoginFormValues) {
+  async function handleLoginSuccess(values: LoginFormValues) {
     const redirectMap: Record<LoginFormValues['role'], string> = {
       loan_officer: '/officer/dashboard',
       manager: '/officer/reports',
@@ -19,7 +20,9 @@ function LoginPage() {
       applicant: '/applicant/status',
     }
 
-    setSessionRole(values.role)
+    const result = await login(values)
+
+    setSessionUser(result.user)
     navigate(redirectMap[values.role], { replace: true })
   }
 
@@ -54,12 +57,20 @@ function LoginPage() {
             console.
           </p>
 
-          <LoginForm onSuccess={handleLoginSuccess} />
+          {error ? <p className="login-error">{error}</p> : null}
 
-          <p className="login-footnote">
-            Demo account route access:{' '}
-            <Link to="/officer/dashboard">Loan Officer</Link> |{' '}
-            <Link to="/applicant/status">Applicant User</Link>
+          <LoginForm
+            onSuccess={(values) => {
+              void handleLoginSuccess(values)
+            }}
+          />
+
+          {loading ? (
+            <p className="dashboard-list-meta">Signing in...</p>
+          ) : null}
+
+          <p className="dashboard-list-meta">
+            New here? <Link to="/register">Create account</Link>
           </p>
         </div>
       </section>

@@ -10,6 +10,7 @@ import EsgSubmissionPage from './pages/EsgSubmissionPage'
 import LoanDetailPage from './pages/LoanDetailPage'
 import LoansPage from './pages/LoansPage'
 import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
 import ReportsPage from './pages/ReportsPage'
 import ScoreResultPage from './pages/ScoreResultPage'
 import ScoringPage from './pages/ScoringPage'
@@ -19,6 +20,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
       <Route
         path="/officer"

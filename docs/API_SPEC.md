@@ -69,7 +69,8 @@ Request:
   "name": "string",
   "email": "string",
   "password": "string",
-  "role": "CUSTOMER|OFFICER"
+  "role": "loan_officer|manager|admin|applicant",
+  "profileImageUrl": "optional string"
 }
 ```
 
@@ -78,7 +79,13 @@ Success `201`:
 ```json
 {
   "msg": "User registered successfully",
-  "user_id": 1
+  "user_id": 1,
+  "user": {
+    "name": "string",
+    "email": "string",
+    "role": "loan_officer|manager|admin|applicant",
+    "profileImageUrl": "optional string"
+  }
 }
 ```
 
@@ -89,7 +96,8 @@ Request:
 ```json
 {
   "email": "string",
-  "password": "string"
+  "password": "string",
+  "role": "loan_officer|manager|admin|applicant"
 }
 ```
 
@@ -98,13 +106,30 @@ Success `200`:
 ```json
 {
   "access_token": "jwt",
-  "token_type": "bearer"
+  "token_type": "bearer",
+  "user": {
+    "name": "string",
+    "email": "string",
+    "role": "loan_officer|manager|admin|applicant",
+    "profileImageUrl": "optional string"
+  }
 }
 ```
 
 ### Planned
 
 - Expand roles to include applicant/officer/manager/admin for UI route guards.
+- Add `GET /auth/me` for profile bootstrap:
+
+```json
+{
+  "name": "string",
+  "email": "string",
+  "role": "loan_officer|manager|admin|applicant",
+  "profileImageUrl": "optional string"
+}
+```
+
 - Standardize error responses:
 
 ```json

@@ -7,6 +7,41 @@ export type ApiError = {
 
 export type ApiQuestionCategory = 'LOAN' | 'E' | 'S' | 'G'
 
+export type ApiUserRole = 'loan_officer' | 'manager' | 'admin' | 'applicant'
+
+export type ApiAuthUser = {
+  name: string
+  email: string
+  role: ApiUserRole
+  profileImageUrl?: string
+}
+
+export type ApiLoginPayload = {
+  email: string
+  password: string
+  role: ApiUserRole
+}
+
+export type ApiLoginResult = {
+  access_token: string
+  token_type: string
+  user: ApiAuthUser
+}
+
+export type ApiRegisterPayload = {
+  name: string
+  email: string
+  password: string
+  role: ApiUserRole
+  profileImageUrl?: string
+}
+
+export type ApiRegisterResult = {
+  msg: string
+  user_id: number
+  user: ApiAuthUser
+}
+
 export type ApiQuestionFieldType =
   | 'text'
   | 'number'

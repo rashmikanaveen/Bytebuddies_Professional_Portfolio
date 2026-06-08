@@ -11,7 +11,35 @@ import type {
   ApiReportResult,
   ApiScoreResult,
   ApiWeightsResult,
+  ApiAuthUser,
+  ApiLoginPayload,
+  ApiLoginResult,
+  ApiRegisterPayload,
+  ApiRegisterResult,
 } from '@/lib/api/types'
+
+let mockUsers: ApiAuthUser[] = [
+  {
+    name: 'Kumara Perera',
+    email: 'officer@greenflow.lk',
+    role: 'loan_officer',
+  },
+  {
+    name: 'Nadeesha Fernando',
+    email: 'manager@greenflow.lk',
+    role: 'manager',
+  },
+  {
+    name: 'Ruwan Jayasinghe',
+    email: 'admin@greenflow.lk',
+    role: 'admin',
+  },
+  {
+    name: 'Saman Holdings',
+    email: 'applicant@greenflow.lk',
+    role: 'applicant',
+  },
+]
 
 let questionsStore: ApiQuestion[] = [
   {
@@ -142,4 +170,41 @@ export async function getAdminWeightsMock(): Promise<ApiWeightsResult[]> {
     sector: matrix.sector,
     consistencyRatio: matrix.consistencyRatio,
   }))
+}
+
+export async function loginMock(
+  payload: ApiLoginPayload,
+): Promise<ApiLoginResult> {
+  const existing = mockUsers.find(
+    (user) => user.email.toLowerCase() === payload.email.toLowerCase(),
+  ) ?? {
+    name: payload.email.split('@')[0],
+    email: payload.email,
+    role: payload.role,
+  }
+
+  return {
+    access_token: 'mock-token',
+    token_type: 'bearer',
+    user: existing,
+  }
+}
+
+export async function registerMock(
+  payload: ApiRegisterPayload,
+): Promise<ApiRegisterResult> {
+  const nextUser: ApiAuthUser = {
+    name: payload.name,
+    email: payload.email,
+    role: payload.role,
+    profileImageUrl: payload.profileImageUrl,
+  }
+
+  mockUsers = [nextUser, ...mockUsers]
+
+  return {
+    msg: 'User registered successfully',
+    user_id: mockUsers.length,
+    user: nextUser,
+  }
 }

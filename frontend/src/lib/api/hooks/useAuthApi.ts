@@ -1,25 +1,28 @@
 import { useCallback, useState } from 'react'
 import { API_MODE } from '@/lib/api/config'
 import { requestJson } from '@/lib/api/client'
-
-type LoginPayload = { email: string; password: string }
-
-type LoginResult = { access_token: string; token_type: string }
+import { loginMock, registerMock } from '@/lib/api/mock/providers'
+import type {
+  ApiLoginPayload,
+  ApiLoginResult,
+  ApiRegisterPayload,
+  ApiRegisterResult,
+} from '@/lib/api/types'
 
 export function useAuthApi() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const login = useCallback(
-    async (payload: LoginPayload): Promise<LoginResult> => {
+    async (payload: ApiLoginPayload): Promise<ApiLoginResult> => {
       setLoading(true)
       setError(null)
       try {
         if (API_MODE === 'mock') {
-          return { access_token: 'mock-token', token_type: 'bearer' }
+          return await loginMock(payload)
         }
 
-        return await requestJson<LoginResult>('/auth/login', {
+        return await requestJson<ApiLoginResult>('/auth/login', {
           method: 'POST',
           body: JSON.stringify(payload),
         })
@@ -35,5 +38,30 @@ export function useAuthApi() {
     [],
   )
 
-  return { loading, error, login }
+  const register = useCallback(
+    async (payload: ApiRegisterPayload): Promise<ApiRegisterResult> => {
+      setLoading(true)
+      setError(null)
+      try {
+        if (API_MODE === 'mock') {
+          return await registerMock(payload)
+        }
+
+        return await requestJson<ApiRegisterResult>('/auth/register', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        })
+      } catch (caught) {
+        const message =
+          caught instanceof Error ? caught.message : 'Failed to register'
+        setError(message)
+        throw caught
+      } finally {
+        setLoading(false)
+      }
+    },
+    [],
+  )
+
+  return { loading, error, login, register }
 }
