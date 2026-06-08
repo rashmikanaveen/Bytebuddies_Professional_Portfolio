@@ -1,17 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
-from app.api.v1.database import SessionLocal
+from app.api.v1.database import get_async_db
 from app.api.v1.models import Application
 
 router = APIRouter(prefix="/applications", tags=["Applications"])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 class ApplicationCreate(BaseModel):
     user_id: int
@@ -20,7 +14,7 @@ class ApplicationCreate(BaseModel):
     loan_amount: float
 
 @router.post("/")
-def create_application(app_data: ApplicationCreate, db: Session = Depends(get_db)):
+async def create_application(app_data: ApplicationCreate, db: AsyncSession = Depends(get_async_db)):
     # Step 1a: User starts an ESG + Loan Application
     new_app = Application(
         user_id=app_data.user_id,
@@ -30,13 +24,13 @@ def create_application(app_data: ApplicationCreate, db: Session = Depends(get_db
         status="SUBMITTED"
     )
     db.add(new_app)
-    db.commit()
-    db.refresh(new_app)
+    await db.commit()
+    await db.refresh(new_app)
     return {"msg": "application created", "application_id": new_app.application_id}
 
 @router.get("/{application_id}")
-def get_application(application_id: int, db: Session = Depends(get_db)):
-    app_record = db.query(Application).filter(Application.application_id == application_id).first()
+async def get_application(application_id: int, db: AsyncSession = Depends(get_async_db)):
+    app_record = await db.scalar(select(Application).where(Application.application_id == application_id))
     if not app_record:
         raise HTTPException(status_code=404, detail="Application not found")
     

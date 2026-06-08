@@ -1,5 +1,5 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import declarative_base
 from dotenv import load_dotenv
 import os
 
@@ -7,20 +7,19 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
-    db_host = os.getenv("DB_HOST")
-    db_user = os.getenv("DB_USER")
-    db_password = os.getenv("DB_PASSWORD")
-    db_name = os.getenv("DB_NAME")
-    db_port = os.getenv("DB_PORT", "5432")
-    db_sslmode = os.getenv("DB_SSLMODE")
-    
-    if all([db_host, db_user, db_password, db_name]):
-        ssl_param = f"?sslmode={db_sslmode}" if db_sslmode else ""
-        DATABASE_URL = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}{ssl_param}"
-    else:
-        DATABASE_URL = "postgresql://postgres:password@localhost:5432/green_scoring_db"
+    raise RuntimeError("DATABASE_URL is not set")
 
-engine = create_engine(DATABASE_URL)
+if not DATABASE_URL.startswith("postgresql+asyncpg://"):
+    raise RuntimeError("DATABASE_URL must use asyncpg scheme: postgresql+asyncpg://...")
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+async_engine = create_async_engine(DATABASE_URL)
+
+AsyncSessionLocal = async_sessionmaker(bind=async_engine, class_=AsyncSession, expire_on_commit=False)
+
+
+async def get_async_db():
+    async with AsyncSessionLocal() as session:
+        yield session
+
+
 Base = declarative_base()
