@@ -71,7 +71,6 @@ class Question(Base):
     category = Column(String(10))
     weight = Column(Float, default=1.0)
 
-    requires_document = Column(Boolean, default=False)
 
     responses = relationship("Response", back_populates="question")
 
@@ -97,6 +96,8 @@ class Response(Base):
     answer_value = Column(Text)
 
     score = Column(Float, default=0)
+
+    requires_document = Column(Boolean, default=False)
 
     application = relationship(
         "Application",
