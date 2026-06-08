@@ -1,4 +1,5 @@
 import type { UserRole } from '@/features/auth/types'
+import AppSelect from '@/components/ui/AppSelect'
 
 type RoleSelectorProps = {
   value: UserRole
@@ -17,9 +18,10 @@ function RoleSelector({ value, error, onChange }: RoleSelectorProps) {
   return (
     <div className="login-form-row">
       <label htmlFor="role">Role</label>
-      <select
+      <AppSelect
         id="role"
-        className={`login-input ${error ? 'login-input-error' : ''}`}
+        className="login-input"
+        error={Boolean(error)}
         value={value}
         onChange={(event) => onChange(event.target.value as UserRole)}
       >
@@ -28,7 +30,7 @@ function RoleSelector({ value, error, onChange }: RoleSelectorProps) {
             {option.label}
           </option>
         ))}
-      </select>
+      </AppSelect>
       {error ? <p className="login-error">{error}</p> : null}
     </div>
   )

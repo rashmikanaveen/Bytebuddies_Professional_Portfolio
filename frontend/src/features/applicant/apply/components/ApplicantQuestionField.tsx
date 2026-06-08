@@ -2,6 +2,7 @@ import type {
   ApplicantAnswerValue,
   ApplicantQuestion,
 } from '@/features/applicant/apply/types'
+import AppSelect from '@/components/ui/AppSelect'
 
 type ApplicantQuestionFieldProps = {
   question: ApplicantQuestion
@@ -33,7 +34,7 @@ function ApplicantQuestionField({
     return (
       <div className="form-row" key={question.key}>
         <label htmlFor={question.key}>{question.label}</label>
-        <select
+        <AppSelect
           id={question.key}
           className="loan-filter-input"
           value={String(value ?? '')}
@@ -45,18 +46,19 @@ function ApplicantQuestionField({
               {option.label}
             </option>
           ))}
-        </select>
+        </AppSelect>
       </div>
     )
   }
 
   if (question.fieldType === 'boolean') {
     return (
-      <div className="form-row" key={question.key}>
+      <div className="form-row form-row-checkbox" key={question.key}>
         <label htmlFor={question.key}>{question.label}</label>
         <input
           id={question.key}
           type="checkbox"
+          className="form-checkbox"
           checked={Boolean(value)}
           onChange={(event) => onChange(event.target.checked)}
         />

@@ -1,4 +1,5 @@
 import type { LoanStatus } from '@/features/loans/types'
+import AppSelect from '@/components/ui/AppSelect'
 
 type LoanFiltersProps = {
   search: string
@@ -29,7 +30,7 @@ function LoanFilters({
         onChange={(event) => onSearchChange(event.target.value)}
       />
 
-      <select
+      <AppSelect
         className="loan-filter-input"
         value={status}
         onChange={(event) =>
@@ -41,9 +42,9 @@ function LoanFilters({
             {option}
           </option>
         ))}
-      </select>
+      </AppSelect>
 
-      <select
+      <AppSelect
         className="loan-filter-input"
         value={sortKey}
         onChange={(event) =>
@@ -55,7 +56,7 @@ function LoanFilters({
         <option value="updatedAt">Sort by Updated Date</option>
         <option value="amountLkr">Sort by Loan Amount</option>
         <option value="greenScore">Sort by Green Score</option>
-      </select>
+      </AppSelect>
     </div>
   )
 }

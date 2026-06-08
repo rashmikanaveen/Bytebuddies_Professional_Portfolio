@@ -511,6 +511,30 @@ body {
   border-color: var(--error);
 }
 
+.app-select-wrap {
+  position: relative;
+  display: grid;
+  align-items: center;
+}
+
+.app-select-wrap-error .app-select {
+  border-color: var(--error);
+}
+
+.app-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 36px;
+}
+
+.app-select-icon {
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+  color: var(--on-surface-variant);
+}
+
 .login-error {
   margin: 0;
   font-size: 13px;
@@ -562,6 +586,21 @@ body {
   padding: 11px 12px;
   color: var(--on-surface);
   font-family: var(--font-body);
+}
+
+.form-row-checkbox {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.form-row-checkbox label {
+  margin: 0;
+}
+
+.form-checkbox {
+  width: 18px !important;
+  height: 18px;
+  justify-self: end;
 }
 
 .form-row input:focus,
