@@ -88,14 +88,25 @@ uv run fastapi dev app/main.py
 
 ### 3. Frontend
 
-**macOS / Linux / WSL2 / Windows (PowerShell)**
+**macOS / Linux / WSL2**
 ```bash
 cd frontend
+cp .env.example .env   # then edit VITE_BACKEND_URL if your backend runs on a different port
+npm install
+npm run dev
+```
+
+**Windows (PowerShell)**
+```powershell
+cd frontend
+Copy-Item .env.example .env   # then edit VITE_BACKEND_URL if your backend runs on a different port
 npm install
 npm run dev
 ```
 
 > App: http://localhost:5173
+>
+> See [`frontend/README.md`](./frontend/README.md) for full details on frontend environment variables.
 
 ### 4. Mandatory Local CI Policy Setup
 
@@ -152,7 +163,11 @@ Workflow files:
 
 ## Environment Variables
 
-Copy `backend/.env.example` to `backend/.env` before running the backend. **Never commit `.env`.**
+**Never commit `.env` files.** Both `.env` files are already listed in their respective `.gitignore`.
+
+### Backend — `backend/.env`
+
+Copy `backend/.env.example` to `backend/.env` before running the backend.
 
 | Variable | Description |
 |---|---|
@@ -162,6 +177,18 @@ Copy `backend/.env.example` to `backend/.env` before running the backend. **Neve
 | `DOCUMENT_INTELLIGENCE_PROVIDER` | `aws_textract` or `azure_doc_intelligence` |
 | `DOCUMENT_INTELLIGENCE_KEY` | API key for the document intelligence service |
 | `DOCUMENT_INTELLIGENCE_ENDPOINT` | Required for Azure only — your resource endpoint URL |
+
+### Frontend — `frontend/.env`
+
+Copy `frontend/.env.example` to `frontend/.env` before running the frontend.
+
+| Variable | Description | Default |
+|---|---|---|
+| `BACKEND_URL` | Base URL of the FastAPI backend | `http://127.0.0.1:8000` |
+
+> **Vite requirement:** All variables exposed to the browser **must** be prefixed with `VITE_`. Access them in code via `import.meta.env.VITE_BACKEND_URL`.
+>
+> For production (Vercel), set `VITE_BACKEND_URL` to your deployed Render backend URL in the Vercel project's Environment Variables settings.
 
 ---
 
