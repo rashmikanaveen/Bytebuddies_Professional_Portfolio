@@ -673,6 +673,11 @@ body {
   background: color-mix(in srgb, var(--tertiary) 10%, transparent);
 }
 
+.loan-status-SUBMITTED {
+  color: var(--on-surface-variant);
+  background: color-mix(in srgb, var(--on-surface-variant) 10%, transparent);
+}
+
 .loan-status-IN_VERIFICATION {
   color: var(--primary-container);
   background: color-mix(in srgb, var(--primary) 10%, transparent);
@@ -682,6 +687,11 @@ body {
 .loan-status-APPROVED {
   color: var(--secondary);
   background: color-mix(in srgb, var(--secondary) 12%, transparent);
+}
+
+.loan-status-OFFICER_APPROVED {
+  color: #2e7d32;
+  background: color-mix(in srgb, #2e7d32 14%, transparent);
 }
 
 .loan-status-FLAGGED {

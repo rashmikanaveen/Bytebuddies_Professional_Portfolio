@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import LoanStatusPill from '@/features/loans/components/LoanStatusPill'
 import type { ApiApplicationRecord } from '@/lib/api/types'
 
 type LoansTableProps = {
@@ -38,7 +39,9 @@ function LoansTable({ loans }: LoansTableProps) {
                 <td>{application.business_name}</td>
                 <td>{application.industry}</td>
                 <td>{application.loan_amount.toLocaleString()}</td>
-                <td>{application.status}</td>
+                <td>
+                  <LoanStatusPill status={application.status} />
+                </td>
                 <td>
                   <Link
                     to={`/officer/loans/${application.application_id}`}

@@ -20,10 +20,10 @@ function LoginPage() {
       applicant: '/applicant/status',
     }
 
-    await login({
-      email: values.email,
-      password: values.password,
-    })
+    // await login({
+    //   email: values.email,
+    //   password: values.password,
+    // })
 
     const sessionUser: SessionUser = {
       name: values.email.split('@')[0],

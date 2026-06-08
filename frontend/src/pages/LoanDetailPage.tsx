@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import LoanStatusPill from '@/features/loans/components/LoanStatusPill'
 import { useApplicationsApi } from '@/lib/api/hooks/useApplicationsApi'
 import type { ApiApplicationRecord } from '@/lib/api/types'
 
@@ -11,9 +12,11 @@ const fallbackDocuments = [
 
 function LoanDetailPage() {
   const { loanId = '' } = useParams()
-  const { getApplication, loading, error } = useApplicationsApi()
+  const { getApplication, approveApplication, loading, error } = useApplicationsApi()
   const [application, setApplication] = useState<ApiApplicationRecord | null>(null)
   const [isInitialLoading, setIsInitialLoading] = useState(true)
+  const [isApproving, setIsApproving] = useState(false)
+  const [actionMessage, setActionMessage] = useState<string | null>(null)
 
   useEffect(() => {
     let isMounted = true
@@ -49,6 +52,33 @@ function LoanDetailPage() {
       isMounted = false
     }
   }, [getApplication, loanId])
+
+  const handleApprove = async () => {
+    if (!application) {
+      return
+    }
+
+    const confirmed = window.confirm(
+      `Approve application #${application.application_id} for ${application.business_name}?`,
+    )
+
+    if (!confirmed) {
+      return
+    }
+
+    setIsApproving(true)
+    setActionMessage(null)
+
+    try {
+      const updatedApplication = await approveApplication(application.application_id)
+      setApplication(updatedApplication)
+      setActionMessage('Application approved successfully.')
+    } catch {
+      // The hook already stores the error state for display.
+    } finally {
+      setIsApproving(false)
+    }
+  }
 
   if ((loading || isInitialLoading) && !application) {
     return (
@@ -92,7 +122,17 @@ function LoanDetailPage() {
       </article>
       <article className="surface-card">
         <h2>Status</h2>
-        <p>{application.status}</p>
+        <LoanStatusPill status={application.status} />
+        <p>Current application status</p>
+        <button
+          type="button"
+          className="table-link-btn"
+          onClick={handleApprove}
+          disabled={isApproving || application.status === 'OFFICER_APPROVED'}
+        >
+          {application.status === 'OFFICER_APPROVED' ? 'Approved' : 'Approve for Officer'}
+        </button>
+        {actionMessage ? <p>{actionMessage}</p> : null}
       </article>
       <article className="surface-card">
         <h2>Documents</h2>

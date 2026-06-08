@@ -52,3 +52,16 @@ async def get_application(application_id: int, db: AsyncSession = Depends(get_as
         raise HTTPException(status_code=404, detail="Application not found")
 
     return serialize_application(app_record)
+
+
+@router.post("/approve/{application_id}")
+async def approve_application(application_id: int, db: AsyncSession = Depends(get_async_db)):
+    app_record = await db.scalar(select(Application).where(Application.application_id == application_id))
+    if not app_record:
+        raise HTTPException(status_code=404, detail="Application not found")
+
+    app_record.status = "OFFICER_APPROVED"
+    await db.commit()
+    await db.refresh(app_record)
+
+    return serialize_application(app_record)
