@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str | None = None
 
     # Security
-    SECRET_KEY: str = "change-this-in-production-use-a-strong-random-key"
+    SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
@@ -37,7 +37,9 @@ class Settings(BaseSettings):
                 ssl_param = "?ssl=require" if self.DB_SSLMODE == "require" else ""
                 self.DATABASE_URL = f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{port}/{self.DB_NAME}{ssl_param}"
             else:
-                self.DATABASE_URL = "postgresql+asyncpg://postgres:password@localhost:5432/green_scoring_db"
+                raise ValueError(
+                    "DATABASE_URL must be set directly or composed from DB_HOST, DB_USER, DB_PASSWORD, and DB_NAME"
+                )
 
 
 settings = Settings()
