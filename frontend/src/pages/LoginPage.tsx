@@ -10,7 +10,7 @@ const heroImageUrl =
 
 function LoginPage() {
   const navigate = useNavigate()
-  const { login, loading, error } = useAuthApi()
+  const { loading, error } = useAuthApi()
 
   async function handleLoginSuccess(values: LoginFormValues) {
     const redirectMap: Record<LoginFormValues['role'], string> = {
