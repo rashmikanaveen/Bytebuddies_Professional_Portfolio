@@ -1,32 +1,64 @@
-import LoanFilters from '@/features/loans/components/LoanFilters'
+import { useEffect, useState } from 'react'
 import LoansTable from '@/features/loans/components/LoansTable'
-import { useLoanTableState } from '@/features/loans/hooks/useLoanTableState'
-import { officerLoans } from '@/features/loans/mock/loanData'
+import { useApplicationsApi } from '@/lib/api/hooks/useApplicationsApi'
+import type { ApiApplicationRecord } from '@/lib/api/types'
 
 function LoansListPlaceholder() {
-  const {
-    search,
-    setSearch,
-    status,
-    setStatus,
-    sortKey,
-    setSortKey,
-    statusFilterOptions,
-    filteredLoans,
-  } = useLoanTableState(officerLoans)
+  const { listApplications, loading, error } = useApplicationsApi()
+  const [applications, setApplications] = useState<ApiApplicationRecord[]>([])
+  const [isInitialLoading, setIsInitialLoading] = useState(true)
+
+  useEffect(() => {
+    let isMounted = true
+
+    const loadApplications = async () => {
+      try {
+        const records = await listApplications()
+
+        if (isMounted) {
+          setApplications(records)
+        }
+      } catch {
+        // The hook already stores the error state for display.
+      } finally {
+        if (isMounted) {
+          setIsInitialLoading(false)
+        }
+      }
+    }
+
+    void loadApplications()
+
+    return () => {
+      isMounted = false
+    }
+  }, [listApplications])
+
+  if ((loading || isInitialLoading) && applications.length === 0) {
+    return (
+      <section className="loan-workspace">
+        <div className="surface-card">
+          <h2>Applications</h2>
+          <p>Loading applications...</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (error && applications.length === 0) {
+    return (
+      <section className="loan-workspace">
+        <div className="surface-card">
+          <h2>Applications</h2>
+          <p>{error}</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="loan-workspace">
-      <LoanFilters
-        search={search}
-        status={status}
-        sortKey={sortKey}
-        statusFilterOptions={statusFilterOptions}
-        onSearchChange={setSearch}
-        onStatusChange={setStatus}
-        onSortChange={setSortKey}
-      />
-      <LoansTable loans={filteredLoans} />
+      <LoansTable loans={applications} />
     </section>
   )
 }
