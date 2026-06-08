@@ -115,6 +115,39 @@ What this enforces on `git push`:
 
 If checks fail, push is blocked until fixed.
 
+### 5. CI/CD Policy (GitHub Actions)
+
+Project policy:
+- CI runs on push to any branch
+- CD runs only on push to `main`
+
+Frontend workflows:
+- `.github/workflows/frontend-ci.yml` runs CI on any branch push for `frontend/**`
+- `.github/workflows/deploy-frontend.yml` deploys to Vercel only on `main`
+
+Backend workflows:
+- `.github/workflows/backend-ci.yml` runs CI on any branch push for `backend/**`
+- `.github/workflows/deploy-backend-render.yml` deploys to Render only on `main`
+
+### 6. Backend CD on Render (GitHub Actions)
+
+Backend deployment is automated via GitHub Actions and triggers only on pushes to `main`.
+
+1. Create a Render Web Service from this repository:
+	- Root Directory: `backend`
+	- Build Command: `pip install uv && uv sync --frozen`
+	- Start Command: `uv run fastapi run app/main.py --host 0.0.0.0 --port $PORT`
+2. In Render, copy your Service ID.
+3. In Render, create an API key.
+4. In GitHub repository settings, add these secrets:
+	- `RENDER_API_KEY`
+	- `RENDER_SERVICE_ID`
+5. Keep Render Auto-Deploy disabled to avoid duplicate deployments (GitHub Actions will trigger deploys).
+
+Workflow files:
+- `.github/workflows/backend-ci.yml` (CI on push to any branch)
+- `.github/workflows/deploy-backend-render.yml` (deploy on push to `main`)
+
 ---
 
 ## Environment Variables
@@ -147,7 +180,10 @@ Copy `backend/.env.example` to `backend/.env` before running the backend. **Neve
 .
 ├── .github/
 │   └── workflows/
-│       └── deploy-frontend.yml   # CD — deploys frontend to Vercel on push to main
+│       ├── frontend-ci.yml       # CI — eslint, vitest, vite build on push to any branch
+│       ├── backend-ci.yml        # CI — backend dependency install + import check + pytest smoke tests
+│       ├── deploy-frontend.yml   # CD — frontend deploy to Vercel on push to main
+│       └── deploy-backend-render.yml # CD — backend deploy trigger to Render on push to main
 ├── .githooks/
 │   └── pre-push                  # Local pre-push gate: runs frontend CI checks
 ├── docs/

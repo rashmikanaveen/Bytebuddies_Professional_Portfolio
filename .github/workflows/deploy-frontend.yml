@@ -1,20 +1,27 @@
 name: Deploy Frontend to Vercel
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'frontend/**'
+  workflow_run:
+    workflows:
+      - Frontend CI
+    types:
+      - completed
+  workflow_dispatch:
 
 jobs:
   deploy:
     name: Deploy to Vercel
     runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main')
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
