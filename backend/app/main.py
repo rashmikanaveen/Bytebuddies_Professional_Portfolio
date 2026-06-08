@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.exc import IntegrityError
 
 from app.core.config import settings
 from app.core.database import Base, engine
+from app.core.exceptions import integrity_error_handler
 from app.api.v1.router import api_router
 
 
@@ -18,6 +20,8 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_PREFIX}/openapi.json",
     #docs_url=f"{settings.API_V1_PREFIX}/docs",
 )
+
+app.add_exception_handler(IntegrityError, integrity_error_handler)
 
 app.add_middleware(
     CORSMiddleware,
