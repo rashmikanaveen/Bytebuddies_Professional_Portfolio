@@ -2,7 +2,6 @@ import {
   BarChart3,
   ClipboardList,
   FilePlus2,
-  Gauge,
   LayoutDashboard,
   LogOut,
   PanelLeft,
@@ -28,7 +27,6 @@ type BaseLayoutProps = {
 const officerNavItems = [
   { to: '/officer/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/officer/loans', label: 'Loan Applications', icon: PanelLeft },
-  { to: '/officer/scoring', label: 'Green Scoring', icon: Gauge },
 ]
 
 const managerNavItems = [

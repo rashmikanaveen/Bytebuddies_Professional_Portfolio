@@ -797,19 +797,61 @@ body {
 }
 
 .table-link-btn {
+  border: 0;
+  background: transparent;
   color: var(--primary-container);
   text-decoration: none;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .table-link-btn:hover {
   text-decoration: underline;
 }
 
+.table-link-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  text-decoration: none;
+}
+
+.approval-loading-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.approval-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid color-mix(in srgb, var(--primary-container) 26%, transparent);
+  border-top-color: var(--primary-container);
+  border-radius: 9999px;
+  animation: approval-spin 800ms linear infinite;
+}
+
+@keyframes approval-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .loan-detail-grid {
   display: grid;
   gap: 14px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.scoring-ready-layout {
+  display: grid;
+  gap: 14px;
+}
+
+.scoring-dummy-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .esg-submission-layout {
