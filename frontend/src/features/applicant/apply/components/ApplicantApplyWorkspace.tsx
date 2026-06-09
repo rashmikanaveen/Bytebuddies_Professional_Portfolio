@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ShieldCheck, Upload } from 'lucide-react'
 import ApplicantQuestionField from '@/features/applicant/apply/components/ApplicantQuestionField'
 import { useApplicantQuestions } from '@/features/applicant/apply/api/useApplicantQuestions'
@@ -49,10 +49,6 @@ function ApplicantApplyWorkspace({
     {},
   )
   const [activeProofKey, setActiveProofKey] = useState<string | null>(null)
-
-  useEffect(() => {
-    setAnswers(initialAnswers ?? {})
-  }, [initialAnswers])
 
   const hasRequiredMissing = useMemo(
     () =>

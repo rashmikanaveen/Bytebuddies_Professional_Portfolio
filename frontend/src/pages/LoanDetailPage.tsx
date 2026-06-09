@@ -150,6 +150,7 @@ function LoanDetailPage() {
       </div>
 
       <ApplicantApplyWorkspace
+        key={application.application_id}
         title="Submitted Loan Application"
         description={`Application #${application.application_id} is shown below using the same field structure as the applicant submission form. Values are prefilled from a frontend hardcoded snapshot until full response data is available.`}
         initialAnswers={prefilledAnswers}
