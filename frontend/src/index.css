@@ -552,6 +552,15 @@ body {
   cursor: pointer;
 }
 
+.primary-btn:hover {
+  background: color-mix(in srgb, var(--primary-container) 88%, black);
+}
+
+.primary-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .applicant-form {
   margin-top: 20px;
   display: grid;
@@ -630,6 +639,15 @@ body {
   font-family: var(--font-body);
 }
 
+.form-row input[readonly],
+.form-row textarea[readonly],
+.form-row input:disabled,
+.form-row select:disabled {
+  color: var(--on-surface);
+  background: var(--surface-container-low);
+  cursor: default;
+}
+
 .form-row-checkbox {
   grid-template-columns: 1fr auto;
   align-items: center;
@@ -662,6 +680,26 @@ body {
   border-radius: var(--radius-base);
   background: var(--surface-container-low);
   padding: 10px;
+}
+
+.question-proof-chip-wrap {
+  display: flex;
+  margin-top: 2px;
+}
+
+.question-proof-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-full, 9999px);
+  background: var(--surface-container-low);
+  color: var(--on-surface-variant);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
 .question-proof-panel input[type='file'] {
@@ -810,6 +848,25 @@ body {
   display: grid;
   gap: 14px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.loan-detail-page-layout {
+  display: grid;
+  gap: 18px;
+}
+
+.loan-detail-status-card {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.loan-detail-approve-btn {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .esg-submission-layout {

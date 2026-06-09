@@ -10,6 +10,7 @@ type ApplicantQuestionFieldProps = {
   value: ApplicantAnswerValue | undefined
   onChange: (value: ApplicantAnswerValue) => void
   proofControls?: ReactNode
+  readOnly?: boolean
 }
 
 function ApplicantQuestionField({
@@ -17,6 +18,7 @@ function ApplicantQuestionField({
   value,
   onChange,
   proofControls,
+  readOnly = false,
 }: ApplicantQuestionFieldProps) {
   const rowClassName = `form-row ${
     question.fieldType === 'textarea' ? 'form-row-wide' : ''
@@ -32,6 +34,8 @@ function ApplicantQuestionField({
           maxLength={question.maxLength}
           placeholder={question.placeholder}
           value={String(value ?? '')}
+          readOnly={readOnly}
+          aria-readonly={readOnly}
           onChange={(event) => onChange(event.target.value)}
         />
         {proofControls}
@@ -47,6 +51,8 @@ function ApplicantQuestionField({
           id={question.key}
           className="loan-filter-input"
           value={String(value ?? '')}
+          disabled={readOnly}
+          aria-readonly={readOnly}
           onChange={(event) => onChange(event.target.value)}
         >
           <option value="">Select an option</option>
@@ -70,6 +76,8 @@ function ApplicantQuestionField({
           type="checkbox"
           className="form-checkbox"
           checked={Boolean(value)}
+          disabled={readOnly}
+          aria-readonly={readOnly}
           onChange={(event) => onChange(event.target.checked)}
         />
         {proofControls}
@@ -90,6 +98,8 @@ function ApplicantQuestionField({
         max={question.max}
         placeholder={question.placeholder}
         value={String(value ?? '')}
+        readOnly={readOnly}
+        aria-readonly={readOnly}
         onChange={(event) => onChange(event.target.value)}
       />
       {question.helpText ? (

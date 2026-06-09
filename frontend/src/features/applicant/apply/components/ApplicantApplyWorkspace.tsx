@@ -1,9 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ShieldCheck, Upload } from 'lucide-react'
 import ApplicantQuestionField from '@/features/applicant/apply/components/ApplicantQuestionField'
 import { useApplicantQuestions } from '@/features/applicant/apply/api/useApplicantQuestions'
 import { useApplicantSubmission } from '@/features/applicant/apply/api/useApplicantSubmission'
-import type { ApplicantAnswerValue } from '@/features/applicant/apply/types'
+import type {
+  ApplicantAnswerMap,
+  ApplicantAnswerValue,
+} from '@/features/applicant/apply/types'
 
 type ProofStatus = {
   fileName?: string
@@ -12,7 +15,22 @@ type ProofStatus = {
   message?: string
 }
 
-function ApplicantApplyWorkspace() {
+type ApplicantApplyWorkspaceProps = {
+  title?: string
+  description?: string
+  initialAnswers?: ApplicantAnswerMap
+  readOnly?: boolean
+  readOnlyProofFiles?: Record<string, string>
+}
+
+function ApplicantApplyWorkspace({
+  title = 'New Loan Application',
+  description =
+    'Questions below define which loan and ESG fields are required for this application flow. Current mode uses mock API hooks and frontend data.',
+  initialAnswers,
+  readOnly = false,
+  readOnlyProofFiles,
+}: ApplicantApplyWorkspaceProps) {
   const { loading, error, sections, questions } = useApplicantQuestions()
   const {
     submitting,
@@ -24,13 +42,17 @@ function ApplicantApplyWorkspace() {
     finalizeApplication,
   } = useApplicantSubmission()
   const [answers, setAnswers] = useState<Record<string, ApplicantAnswerValue>>(
-    {},
+    initialAnswers ?? {},
   )
   const [proofFiles, setProofFiles] = useState<Record<string, File | null>>({})
   const [proofStatuses, setProofStatuses] = useState<Record<string, ProofStatus>>(
     {},
   )
   const [activeProofKey, setActiveProofKey] = useState<string | null>(null)
+
+  useEffect(() => {
+    setAnswers(initialAnswers ?? {})
+  }, [initialAnswers])
 
   const hasRequiredMissing = useMemo(
     () =>
@@ -136,11 +158,8 @@ function ApplicantApplyWorkspace() {
 
   return (
     <section className="surface-card">
-      <h2>New Loan Application</h2>
-      <p>
-        Questions below define which loan and ESG fields are required for this
-        application flow. Current mode uses mock API hooks and frontend data.
-      </p>
+      <h2>{title}</h2>
+      <p>{description}</p>
 
       {loading ? <p>Loading form questions...</p> : null}
       {error ? <p className="login-error">{error}</p> : null}
@@ -150,6 +169,11 @@ function ApplicantApplyWorkspace() {
         noValidate
         onSubmit={(event) => {
           event.preventDefault()
+
+          if (readOnly) {
+            return
+          }
+
           if (!hasRequiredMissing) {
             void (async () => {
               const targetApplicationId = await getOrCreateApplicationId()
@@ -163,8 +187,7 @@ function ApplicantApplyWorkspace() {
         {sections.map((section) => (
           <article
             key={section.key}
-            className={`surface-card applicant-question-section applicant-section-${section.key} ${section.key === 'LOAN' ? 'loan-details-section' : ''
-              }`}
+            className={`surface-card applicant-question-section applicant-section-${section.key} ${section.key === 'LOAN' ? 'loan-details-section' : ''}`}
           >
             <h3>{section.title}</h3>
             {section.questions.map((question) => (
@@ -175,10 +198,18 @@ function ApplicantApplyWorkspace() {
                 onChange={(value) =>
                   setAnswers((prev) => ({ ...prev, [question.key]: value }))
                 }
+                readOnly={readOnly}
                 proofControls={
-                  question.category === 'E' ||
-                    question.category === 'S' ||
-                    question.category === 'G' ? (
+                  readOnly && readOnlyProofFiles?.[question.key] ? (
+                    <div className="question-proof-chip-wrap">
+                      <span className="question-proof-chip">
+                        {readOnlyProofFiles[question.key]}
+                      </span>
+                    </div>
+                  ) : !readOnly &&
+                    (question.category === 'E' ||
+                      question.category === 'S' ||
+                      question.category === 'G') ? (
                     <div className="question-proof-panel">
                       <input
                         id={`${question.key}-proof`}
@@ -230,17 +261,19 @@ function ApplicantApplyWorkspace() {
           </article>
         ))}
 
-        {hasRequiredMissing ? (
+        {!readOnly && hasRequiredMissing ? (
           <p className="login-error">
             Please fill all required fields before submit.
           </p>
         ) : null}
 
-        {submitMessage ? <p>{submitMessage}</p> : null}
+        {!readOnly && submitMessage ? <p>{submitMessage}</p> : null}
 
-        <button type="submit" className="primary-btn" disabled={submitting}>
-          {submitting ? 'Submitting...' : 'Submit Application'}
-        </button>
+        {!readOnly ? (
+          <button type="submit" className="primary-btn" disabled={submitting}>
+            {submitting ? 'Submitting...' : 'Submit Application'}
+          </button>
+        ) : null}
       </form>
     </section>
   )
